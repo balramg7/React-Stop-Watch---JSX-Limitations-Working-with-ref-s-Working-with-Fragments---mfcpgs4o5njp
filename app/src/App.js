@@ -2,17 +2,17 @@ import { useRef, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [time, setTime] = useState(0);
-  const [laps, setLaps] = useState([]);
-  const intervalRef = useRef(null); // To store the interval reference
+const [time, setTime] = useState(0);
+const [laps, setLaps] = useState([]);
+  const intervalRef = useRef(null);
 
-  const startTimer = () => {
+const startTimer = () => {
     if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10); // Update time every 10 milliseconds
+        setTime((prevTime) => prevTime + 10); 
       }, 10);
     }
-  };
+};
 
   const stopTimer = () => {
     if (intervalRef.current) {
