@@ -6,13 +6,13 @@ const [time, setTime] = useState(0);
 const [laps, setLaps] = useState([]);
   const intervalRef = useRef(null);
 
-const startTimer = () => {
+  function startTimer() {
     if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 10); 
+        setTime((prevTime) => prevTime + 10);
       }, 10);
     }
-};
+  }
 
   const stopTimer = () => {
     if (intervalRef.current) {
