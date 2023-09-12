@@ -1,72 +1,79 @@
 "use client";
-import React, { useRef, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 
 function Home() {
   const startTime = useRef(0);
+
   const intervalRef = useRef(0);
+
   const [currentTime, setCurrentTime] = useState(0);
+
   const [laps, setLaps] = useState([]);
 
-  const startTimer = () => {
-    if (!intervalRef.current) {
-      startTime.current = Date.now() - currentTime;
-      intervalRef.current = setInterval(updateTime, 10);
-    }
+  const start = () => {
+    startTime.current = Date.now();
+
+    intervalRef.current = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 10);
   };
 
-  const stopTimer = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+  const stop = () => {
+    clearInterval(intervalRef.current);
   };
 
-  const recordLap = () => {
-    if (intervalRef.current) {
-      const lapTime = (Date.now() - startTime.current) / 1000;
-      setLaps((prevLaps) => [...prevLaps, lapTime.toFixed(3)]);
-    }
-  };
+  const reset = () => {
+    clearInterval(intervalRef.current);
 
-  const resetTimer = () => {
-    stopTimer();
     setCurrentTime(0);
+
+    startTime.current = 0;
+
     setLaps([]);
   };
 
-  const updateTime = () => {
-    setCurrentTime((Date.now() - startTime.current) / 1000);
+  const lap = () => {
+    setLaps([...laps, ((currentTime - startTime.current) / 1000).toFixed(3)]);
   };
 
   return (
     <div id="main">
       <section>
-        <h1 className="seconds-elapsed">{currentTime.toFixed(3)}</h1>
+        <h1 className="seconds-elapsed">
+          {((currentTime - startTime.current) / 1000).toFixed(3)}
+        </h1>
+
         <section className="buttons">
-          <button className="start-btn" onClick={startTimer}>
+          <button className="start-btn" onClick={start}>
             START
           </button>
-          <button className="stop-btn" onClick={stopTimer}>
+
+          <button className="stop-btn" onClick={stop}>
             STOP
           </button>
-          <button className="lap-btn" onClick={recordLap}>
+
+          <button className="lap-btn" onClick={lap}>
             LAP
           </button>
-          <button className="reset-btn" onClick={resetTimer}>
+
+          <button className="reset-btn" onClick={reset}>
             RESET
           </button>
         </section>
       </section>
-      <section className="lap-section">
-        <h2>Laps</h2>
-        <section className="laps">
-          {laps.map((lap, index) => (
-            <p key={index}>
-              lap {index + 1}: {lap} seconds
-            </p>
-          ))}
+
+      {laps.length >= 1 && (
+        <section className="lap-section">
+          <h2>Laps</h2>
+
+          <section className="laps">
+            {laps?.map((value) => {
+              return <p>{value}</p>;
+            })}
+          </section>
         </section>
-      </section>
+      )}
     </div>
   );
 }
